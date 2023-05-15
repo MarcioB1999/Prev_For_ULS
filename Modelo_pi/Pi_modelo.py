@@ -22,19 +22,20 @@ def uls(datafile,predictD):
   P = np.zeros(N)#custo unitário
   F = np.zeros(N)#custo fixo
   D = np.zeros(N)#demanda
-    
+
+  #Custo unitario para o produto ser fabricado
   P = [float(linhas[1]) for i in range(N)]
 
-
+  #Custo para se começar a produzir
   F = [float(linhas[2]) for i in range(N)]
 
-
+  #Custo unitario para o produto ser estocado
   H = [float(linhas[3]) for i in range(N)]
  
 
   #D = np.fromstring(linhas[5], dtype=float, sep = ' ')
+  #Demandas
   D = predictD
-    #print(D)
     
 
     
