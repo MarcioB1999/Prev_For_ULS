@@ -26,11 +26,7 @@ def uls(datafile,predictD):
   P = [float(linhas[1]) for i in range(N)]
 
 
-
   F = [float(linhas[2]) for i in range(N)]
-
-
-
 
 
   H = [float(linhas[3]) for i in range(N)]
@@ -85,7 +81,8 @@ def uls(datafile,predictD):
 
 past = 'C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Previsoes/'
             
-datafile = "ULS_instancia.txt"
+datafile = 'C:/Users/marcio/Documents/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
+
 
 previsoes_sar = []
 for index in range(3):
@@ -94,7 +91,7 @@ for index in range(3):
 
 resultados_sar = []           
 for i in range(len(previsoes_sar)):
-  resultados_sar.append(uls(datafile,previsoes_sar))
+  resultados_sar.append(uls(datafile,np.array(previsoes_sar[i])))
     
             
 
@@ -106,7 +103,7 @@ for index in range(3):
             
 resultados_np = [] 
 for i in range(len(previsoes_sar)):
-  resultados_np.append(uls(datafile,previsoes_np))
+  resultados_np.append(uls(datafile,np.array(previsoes_np[i])))
 
 
 
