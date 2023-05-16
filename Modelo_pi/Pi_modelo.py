@@ -3,6 +3,8 @@ import gurobipy as gp
 from gurobipy import GRB
 import pandas as pd
 
+MAX_CPU_TIME = 3600.0
+EPSILON = 1e-6
 
 def uls(datafile,predictD):
 
@@ -11,7 +13,6 @@ def uls(datafile,predictD):
 
   # remove linha vazia inicial e elimina os "\n" de cada linha
   linhas = [a.strip() for a in linhas] 
-
 
  # ler o tamanho da instancia
     
@@ -32,23 +33,22 @@ def uls(datafile,predictD):
   #Custo unitario para o produto ser estocado
   H = [float(linhas[3]) for i in range(N)]
  
-
   #D = np.fromstring(linhas[5], dtype=float, sep = ' ')
   #Demandas
   D = predictD
-    
-
-    
-
+  
   #cria o modelo
   m = gp.Model("ulsr") 
+
   m.Params.LogToConsole = 0
+  m.setParam(GRB.Param.TimeLimit, MAX_CPU_TIME)
+  m.setParam(GRB.Param.MIPGap, EPSILON)
+  m.setParam(GRB.Param.Threads, 1)
 
   #Adicionando Variáveis
   x = m.addVars(N, name='x') 
   s = m.addVars(N, name='s')  
   y = m.addVars(N, vtype=GRB.BINARY, name='y') 
-
 
   # funcao objetivo
   obj = 0
@@ -68,14 +68,25 @@ def uls(datafile,predictD):
 
   m.addConstr(s[N-1] == 0)
 
+  # export .lp
+	#model.write(file_name+"_model.lp")
+
   m.optimize()
 
+  tmp = 0
+  if m.status == GRB.OPTIMAL:
+     tmp = 1
 
-  resultados = {'x': [x[i].getAttr("x") for i in x],
-              's':  [s[i].getAttr("x") for i in s],
-              'y': [y[i].getAttr("x") for i in y],
-              'ObjVal': m.ObjVal
-             }
+  resultados = {
+     'x': [x[i].getAttr("x") for i in x],
+     's':  [s[i].getAttr("x") for i in s],
+     'y': [y[i].getAttr("x") for i in y],
+     'ObjVal': m.ObjVal,
+     #'ObjBound': m.ObjBound,
+     #"RunTime": m.Runtime,
+     #"NodeCount": m.NodeCount,
+     #"Status": tmp
+    }
 
   return resultados
 
