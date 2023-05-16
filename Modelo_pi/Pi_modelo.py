@@ -3,6 +3,9 @@ import gurobipy as gp
 from gurobipy import GRB
 import pandas as pd
 
+MAX_CPU_TIME = 3600.0
+EPSILON = 1e-6
+
 
 def uls(datafile,predictD):
 
@@ -41,8 +44,11 @@ def uls(datafile,predictD):
     
 
   #cria o modelo
-  m = gp.Model("ulsr") 
+  m = gp.Model("uls") 
   m.Params.LogToConsole = 0
+  m.setParam(GRB.Param.TimeLimit, MAX_CPU_TIME)
+  m.setParam(GRB.Param.MIPGap, EPSILON)
+  m.setParam(GRB.Param.Threads, 1)
 
   #Adicionando Variáveis
   x = m.addVars(N, name='x') 
@@ -69,44 +75,71 @@ def uls(datafile,predictD):
   m.addConstr(s[N-1] == 0)
 
   m.optimize()
+  tmp = 0
+  if m.status == GRB.OPTIMAL:
+    tmp = 1
 
-
-  resultados = {'x': [x[i].getAttr("x") for i in x],
-              's':  [s[i].getAttr("x") for i in s],
-              'y': [y[i].getAttr("x") for i in y],
-              'ObjVal': m.ObjVal
-             }
+  resultados = {
+     'x': [x[i].getAttr("x") for i in x],
+     's':  [s[i].getAttr("x") for i in s],
+     'y': [y[i].getAttr("x") for i in y],
+     'ObjVal': m.ObjVal,
+     'ObjBound': m.ObjBound,
+     'RunTime': m.Runtime,
+     'NodeCount': m.NodeCount,
+     'Status': tmp
+    }
 
   return resultados
 
 
-past = 'C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Previsoes/'
-            
-datafile = 'C:/Users/marcio/Documents/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
+if __name__=="__main__":
+  #pasta previsoes
+  past = 'C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Previsoes/'
 
+  #instancia ULs        
+  datafile = 'C:/Users/marcio/Documents/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
 
-previsoes_sar = []
-for index in range(3):
+#\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  #carregando as previsoes do sarimax
+  previsoes_sar = []
+  for index in range(3):
     with open(past+f'Prev_sar/Previsao_sar{index}.txt', "r") as arquivo:
-	    previsoes_sar.append([float(demanda) for demanda in arquivo.read().split(',')])
+      previsoes_sar.append([float(demanda) for demanda in arquivo.read().split(',')])
 
-resultados_sar = []           
-for i in range(len(previsoes_sar)):
-  resultados_sar.append(uls(datafile,np.array(previsoes_sar[i])))
-    
-            
-
-
-previsoes_np = []
-for index in range(3):
+  #resolvendo problema de PI com as previsoes do sarimax
+  resultados_sar = []           
+  for i in range(len(previsoes_sar)):
+    resultados_sar.append(uls(datafile,np.array(previsoes_sar[i])))
+      
+              
+#\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  #carregando as previsoes do neural prophet
+  previsoes_np = []
+  for index in range(3):
     with open(past+f'Prev_pro/Previsao_pro{index}.txt', "r") as arquivo:
-	    previsoes_np.append([float(demanda) for demanda in arquivo.read().split(',')])
-            
-resultados_np = [] 
-for i in range(len(previsoes_sar)):
-  resultados_np.append(uls(datafile,np.array(previsoes_np[i])))
+      previsoes_np.append([float(demanda) for demanda in arquivo.read().split(',')])
+
+  #resolvendo problema de PI com as previsoes do neural prophet   
+  resultados_np = [] 
+  for i in range(len(previsoes_sar)):
+    resultados_np.append(uls(datafile,np.array(previsoes_np[i])))
 
 
+#\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  #carregando as demandas de treinamento
+  demandas_aux = pd.read_csv('C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Demandas_treinamento/demandas')['demandas']
+  demandas_treino = []
+  for i in range(4):
+    demandas_treino.append(demandas_aux.iloc[i*52:(i+1)*52])
 
-pd.DataFrame(resultados_np).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
-pd.DataFrame(resultados_sar).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
+  #resolvendo problema de PI com as demandas de treinamento  
+  resultados_treino = [] 
+  for i in range(len(demandas_treino)):
+    resultados_treino.append(uls(datafile,np.array(demandas_treino[i])))
+  
+
+#\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  pd.DataFrame(resultados_np).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
+  pd.DataFrame(resultados_sar).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
+  pd.DataFrame(resultados_treino).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_treino.csv")
