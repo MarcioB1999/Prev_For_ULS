@@ -3,6 +3,8 @@ import gurobipy as gp
 from gurobipy import GRB
 import pandas as pd
 
+MAX_CPU_TIME = 3600.0
+EPSILON = 1e-6
 
 def uls(datafile,predictD):
 
@@ -36,11 +38,11 @@ def uls(datafile,predictD):
   D = predictD
   
   #cria o modelo
-  m = gp.Model("ulsr") 
+  m = gp.Model("uls") 
 
   m.Params.LogToConsole = 0
-  m.setParam(GRB.Param.TimeLimit)
-  m.setParam(GRB.Param.MIPGap)
+  m.setParam(GRB.Param.TimeLimit, MAX_CPU_TIME)
+  m.setParam(GRB.Param.MIPGap, EPSILON)
   m.setParam(GRB.Param.Threads, 1)
 
   #Adicionando Variáveis
@@ -70,12 +72,20 @@ def uls(datafile,predictD):
 	#model.write(file_name+"_model.lp")
 
   m.optimize()
+  tmp = 0
+  if m.status == GRB.OPTIMAL:
+    tmp = 1
+
 
   resultados = {
      'x': [x[i].getAttr("x") for i in x],
      's':  [s[i].getAttr("x") for i in s],
      'y': [y[i].getAttr("x") for i in y],
      'ObjVal': m.ObjVal,
+     'ObjBound': m.ObjBound,
+     'RunTime': m.Runtime,
+     'NodeCount': m.NodeCount,
+     'Status': tmp
     }
 
   return resultados
