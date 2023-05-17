@@ -3,6 +3,7 @@
 Esse Projeto tem como a principal intenção analisar como os resultados do problema de otimização ULS irão se comportar ao receber previsões de demandas.
 
 ## Fluxograma
+Ao se executar algum algoritmo de uma fase, com exceção de algoritmos de análises, terá que se executar todos outros algoritmos de fases posteriores. Algoritmos paralelos não necessitam serem excutados um após outro, pois um não influencia no resultado do outro.
 
 ### Fase Inicial
 
