@@ -101,7 +101,7 @@ if __name__=="__main__":
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do sarimax
   previsoes_sar = []
-  for index in range(3):
+  for index in range(30):
     with open(past+f'Prev_sar/Previsao_sar{index}.txt', "r") as arquivo:
       previsoes_sar.append([float(demanda) for demanda in arquivo.read().split(',')])
 
@@ -114,13 +114,13 @@ if __name__=="__main__":
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do neural prophet
   previsoes_np = []
-  for index in range(3):
+  for index in range(30):
     with open(past+f'Prev_pro/Previsao_pro{index}.txt', "r") as arquivo:
       previsoes_np.append([float(demanda) for demanda in arquivo.read().split(',')])
 
   #resolvendo problema de PI com as previsoes do neural prophet   
   resultados_np = [] 
-  for i in range(len(previsoes_sar)):
+  for i in range(len(previsoes_np)):
     resultados_np.append(uls(datafile,np.array(previsoes_np[i])))
 
 
