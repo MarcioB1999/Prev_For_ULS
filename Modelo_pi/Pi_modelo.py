@@ -27,11 +27,13 @@ def uls(datafile,predictD):
   #Custo unitario para o produto ser fabricado
   P = [float(linhas[1]) for i in range(N)]
 
+
   #Custo para se começar a produzir
   F = [float(linhas[2]) for i in range(N)]
 
   #Custo unitario para o produto ser estocado
   H = [float(linhas[3]) for i in range(N)]
+
  
   #D = np.fromstring(linhas[5], dtype=float, sep = ' ')
   #Demandas
@@ -92,11 +94,14 @@ def uls(datafile,predictD):
 
 
 if __name__=="__main__":
+  
+
   #pasta previsoes
   past = 'C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Previsoes/'
 
   #instancia ULs        
   datafile = 'C:/Users/marcio/Documents/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
+
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do sarimax
@@ -138,6 +143,8 @@ if __name__=="__main__":
   
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
   pd.DataFrame(resultados_np).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
   pd.DataFrame(resultados_sar).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
   pd.DataFrame(resultados_treino).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_treino.csv")
+  
