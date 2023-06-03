@@ -21,7 +21,8 @@ if __name__=="__main__":
     demandas = []
 
     for indice in range(int(K/52)):
-        funcao_demanda = lambda i: int(10000+400*np.cos(6.2831*(i+10)/50+1.8849)+np.random.normal(0, 30,1)[0])
+        #funcao_demanda = lambda i: int(10000+400*np.cos(6.2831*(i+10)/50+1.8849)+np.random.normal(0, 30,1)[0])
+        funcao_demanda = lambda i: int(100+10*np.cos(6.2831*(i+10)/50+1.8849)+np.random.normal(0, 1,1)[0])
         demandas += [funcao_demanda(i) for i in range(52)]
     
     df_demandas = pd.DataFrame({'date':date,'demandas':demandas})

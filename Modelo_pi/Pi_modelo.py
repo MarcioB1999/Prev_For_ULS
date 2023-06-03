@@ -105,7 +105,7 @@ if __name__=="__main__":
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do sarimax
-
+  
   previsoes_sar = []
   for index in range(30):
     with open(past+f'Prev_sar/Previsao_sar{index}.txt', "r") as arquivo:
@@ -115,11 +115,11 @@ if __name__=="__main__":
   resultados_sar = []           
   for i in range(len(previsoes_sar)):
     resultados_sar.append(uls(datafile,np.array(previsoes_sar[i])))
-
+  
               
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do neural prophet
-
+  
   previsoes_np = []
   for index in range(30):
     with open(past+f'Prev_pro/Previsao_pro{index}.txt', "r") as arquivo:
@@ -129,6 +129,7 @@ if __name__=="__main__":
   resultados_np = [] 
   for i in range(len(previsoes_np)):
     resultados_np.append(uls(datafile,np.array(previsoes_np[i])))
+  
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as demandas de treinamento
