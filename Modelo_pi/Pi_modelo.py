@@ -106,15 +106,15 @@ if __name__=="__main__":
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do sarimax
   
-  previsoes_sar = []
+  previsoes_ari = []
   for index in range(30):
-    with open(past+f'Prev_sar/Previsao_sar{index}.txt', "r") as arquivo:
-      previsoes_sar.append([float(demanda) for demanda in arquivo.read().split(',')])
+    with open(past+f'Prev_ari/Previsao_ari{index}.txt', "r") as arquivo:
+      previsoes_ari.append([float(demanda) for demanda in arquivo.read().split(',')])
 
   #resolvendo problema de PI com as previsoes do sarimax
-  resultados_sar = []           
-  for i in range(len(previsoes_sar)):
-    resultados_sar.append(uls(datafile,np.array(previsoes_sar[i])))
+  resultados_ari = []           
+  for i in range(len(previsoes_ari)):
+    resultados_ari.append(uls(datafile,np.array(previsoes_ari[i])))
   
               
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -147,6 +147,6 @@ if __name__=="__main__":
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   pd.DataFrame(resultados_np).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
-  pd.DataFrame(resultados_sar).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
+  pd.DataFrame(resultados_ari).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_ar.csv")
   pd.DataFrame(resultados_treino).to_csv("C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_treino.csv")
   
