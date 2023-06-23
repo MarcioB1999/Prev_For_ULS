@@ -83,11 +83,12 @@ def uls(datafile,predictD):
      'x': [x[i].getAttr("x") for i in x],
      's':  [s[i].getAttr("x") for i in s],
      'y': [y[i].getAttr("x") for i in y],
+     'Demanda': list(predictD),
      'ObjVal': m.ObjVal,
      'ObjBound': m.ObjBound,
      'RunTime': m.Runtime,
      'NodeCount': m.NodeCount,
-     'Status': tmp
+     'Status': tmp,
     }
 
   return resultados
