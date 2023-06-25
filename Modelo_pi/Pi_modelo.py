@@ -108,7 +108,7 @@ if __name__=="__main__":
   #carregando as previsoes do sarimax
   
   previsoes_ari = []
-  for index in range(30):
+  for index in range(60):
     with open(past+f'Prev_ari/Previsao_ari{index}.txt', "r") as arquivo:
       previsoes_ari.append([float(demanda) for demanda in arquivo.read().split(',')])
 
@@ -122,7 +122,7 @@ if __name__=="__main__":
   #carregando as previsoes do neural prophet
   
   previsoes_np = []
-  for index in range(30):
+  for index in range(60):
     with open(past+f'Prev_pro/Previsao_pro{index}.txt', "r") as arquivo:
       previsoes_np.append([float(demanda) for demanda in arquivo.read().split(',')])
 
