@@ -16,7 +16,7 @@ def uls(datafile,predictD):
 
  # ler o tamanho da instancia
     
-  N = int(linhas[0])
+  N = len(predictD)
   #  N = 5 
       
   H = np.zeros(N)#custo no estoque
@@ -25,14 +25,14 @@ def uls(datafile,predictD):
   D = np.zeros(N)#demanda
 
   #Custo unitario para o produto ser fabricado
-  P = [float(linhas[1]) for i in range(N)]
+  P = [float(linhas[0]) for i in range(N)]
 
 
   #Custo para se começar a produzir
-  F = [float(linhas[2]) for i in range(N)]
+  F = [float(linhas[1]) for i in range(N)]
 
   #Custo unitario para o produto ser estocado
-  H = [float(linhas[3]) for i in range(N)]
+  H = [float(linhas[2]) for i in range(N)]
 
  
   #D = np.fromstring(linhas[5], dtype=float, sep = ' ')
@@ -60,7 +60,8 @@ def uls(datafile,predictD):
     obj += F[i] * y[i]
 
   m.setObjective(obj, GRB.MINIMIZE)
-    
+
+
   m.addConstr(x[0] - s[0] == D[0])
   for i in range(1, N):
     m.addConstr(s[i-1] + x[i] - s[i] == D[i])
@@ -134,10 +135,23 @@ if __name__=="__main__":
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as demandas de treinamento
-  demandas_aux = pd.read_csv('C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Demandas_treinamento/demandas')['demandas']
+  dateparse= lambda dates:pd.datetime.strptime(dates,'%Y-%m-%d')
+  demandas_aux = pd.read_csv('C:/Users/marcio/Documents/Prev_For_ULS/Resultados/tabelas/Demandas_treinamento/demandas',parse_dates=['date'],date_parser=dateparse)
   demandas_treino = []
-  for i in range(4):
-    demandas_treino.append(demandas_aux.iloc[i*52:(i+1)*52])
+  
+  #print(demandas_aux)
+  filtro_string = [f'(date>="201{i}/01/01" and date<"201{i}/05/01")' for i in range(5,9)]
+  filtro = filtro_string[0]+'or'+filtro_string[1]+'or'+filtro_string[2]+'or'+filtro_string[3]
+  #print(filtro)
+  demandas_aux.query(filtro,inplace=True)
+  
+
+  for i in range(5,9): 
+    demandas_treino.append(demandas_aux.query(f'date>="201{i}/01/01" and date<"201{i+1}/01/01"')['demandas'])
+    
+
+
+  
 
   #resolvendo problema de PI com as demandas de treinamento  
   resultados_treino = [] 
