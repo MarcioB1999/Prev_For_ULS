@@ -3,15 +3,16 @@ import numpy as np
 
 
 def describe_var(dataframe,var):
-    resultado_var = {}
-    
-    for periodo in range(17):
-        aux = []
-        for list in dataframe[var]:
-            aux.append(list[periodo])
-        resultado_var[f'{var}{periodo+1}'] = aux
 
-    return pd.DataFrame(resultado_var)
+    lista = []
+    for i in dataframe[var].values:
+        lista.append(list(i))
+
+    lista = np.array(lista)
+
+    lista = pd.DataFrame(data=lista,columns=[f'{var}{i}' for i in range(17)])
+
+    return lista
 
 
 def arrumaDataFrame(resultados):
@@ -34,12 +35,12 @@ def arrumaDataFrame(resultados):
 def dataFrame_to_boxPlot(dataFrame,var):
     data = {}
     column_value = []
-    column_x = []
-
+    column_ = []
+ 
     for column in range(len(dataFrame.columns)):
         column_value += list(dataFrame.iloc[:,column])
-        column_x += [f'x{column+1}' for i in range(len(dataFrame))]
+        column_ += [dataFrame.columns[column] for i in range(len(dataFrame))]
 
     data[var]=column_value
-    data['x']=column_x
+    data[dataFrame.columns[0][0]]=column_
     return pd.DataFrame(data)
