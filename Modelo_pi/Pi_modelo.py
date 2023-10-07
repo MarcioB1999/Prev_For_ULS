@@ -101,10 +101,10 @@ if __name__=="__main__":
   
 
   #pasta previsoes
-  past = '../Resultados/tabelas/Previsoes/'
+  past = 'C:/Users/Marcio Barros/Documents/Codigos/Prev_For_ULS/Resultados/tabelas/Previsoes/'
 
   #instancia ULs        
-  datafile = '../Modelo_pi/ULS_instancia.txt'
+  datafile = 'C:/Users/Marcio Barros/Documents/Codigos/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
 
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -123,7 +123,7 @@ if __name__=="__main__":
               
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as previsoes do neural prophet
-  
+  '''  
   previsoes_np = []
   for index in range(60):
     with open(past+f'Prev_pro/Previsao_pro{index}.txt', "r") as arquivo:
@@ -134,9 +134,10 @@ if __name__=="__main__":
   for i in range(len(previsoes_np)):
     resultados_np.append(uls(datafile,np.array(previsoes_np[i])))
   
-
+  '''
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   #carregando as demandas de treinamento
+  '''
   dateparse= lambda dates:datetime.datetime.strptime(dates,'%Y-%m-%d')
   demandas_aux = pd.read_csv('../Resultados/tabelas/Demandas_treinamento/demandas',parse_dates=['date'],date_parser=dateparse)
   demandas_treino = []
@@ -160,10 +161,10 @@ if __name__=="__main__":
   for i in range(len(demandas_treino)):
     resultados_treino.append(uls(datafile,np.array(demandas_treino[i])))
   
-
+  '''
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-  pd.DataFrame(resultados_np).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
-  pd.DataFrame(resultados_sar).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
-  pd.DataFrame(resultados_treino).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_treino.csv")
+  #pd.DataFrame(resultados_np).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
+  pd.DataFrame(resultados_sar).to_csv("C:/Users/Marcio Barros/Documents/Codigos/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
+  #pd.DataFrame(resultados_treino).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_treino.csv")
   
