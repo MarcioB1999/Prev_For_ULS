@@ -101,10 +101,10 @@ if __name__=="__main__":
   
 
   #pasta previsoes
-  past = 'C:/Users/Marcio Barros/Documents/Codigos/Prev_For_ULS/Resultados/tabelas/Previsoes/'
+  past = 'C:/Users/marci/OneDrive/Documents/Codigos/Prev_For_ULS/Resultados/tabelas/Previsoes/'
 
   #instancia ULs        
-  datafile = 'C:/Users/Marcio Barros/Documents/Codigos/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
+  datafile = 'C:/Users/marci/OneDrive/Documents/Codigos/Prev_For_ULS/Modelo_pi/ULS_instancia.txt'
 
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -165,6 +165,6 @@ if __name__=="__main__":
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   #pd.DataFrame(resultados_np).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_np.csv")
-  pd.DataFrame(resultados_sar).to_csv("C:/Users/Marcio Barros/Documents/Codigos/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
+  pd.DataFrame(resultados_sar).to_csv("C:/Users/marci/OneDrive/Documents/Codigos/Prev_For_ULS/Resultados/tabelas/Resultados_pi/resultados_pi_sar.csv")
   #pd.DataFrame(resultados_treino).to_csv("../Resultados/tabelas/Resultados_pi/resultados_pi_treino.csv")
   
